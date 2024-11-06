@@ -1,0 +1,102 @@
+#!/bin/bash
+
+while true
+do
+    echo "------------------------------------------------------"
+    echo "1. Create Address Book"
+    echo "2. Insert record in Address Book"
+    echo "3. Display Address Book"
+    echo "4. Delete record from Address Book"
+    echo "5. Modify record in Address Book"
+    echo "6. Search record in Address Book"
+    echo "7. Exit"
+    echo "Enter your choice : "
+    read choice
+    case $choice in
+
+    1) echo "------------------------------------------------------"
+        echo "Create address book"
+        echo "Enter the name of the address book:"
+        read fname
+        
+        if [ -e $fname ]
+        then
+            echo "File already exist!" 
+        else
+            touch $fname
+            echo "File Created"
+        fi
+    ;;
+
+    2)echo "------------------------------------------------------"
+        echo "Insert record"
+        echo "Enter name:"
+        read name
+        echo "Enter class:"
+        read class
+        echo "Enter roll number:"
+        read roll
+        echo "Enter address:"
+        read addr
+        echo "$name $class $roll $addr">> $fname
+        ;;
+
+    3)echo "------------------------------------------------------"
+        echo "Display records in address book"
+        echo   "------------------Address Book------------------------"
+        cat $fname;;
+
+    4)echo "------------------------------------------------------"
+        echo "Delete Record"
+        echo "Please enter the name of the record to be deleted"
+        read dname
+        grep -v "^$dname" $fname>>newf.txt
+        cp newf.txt $fname
+        rm newf.txt
+        echo "------------------------------------------------------"
+        echo   "------------------Address Book------------------------"
+        echo "------------------------------------------------------"
+        cat $fname
+        echo "------------------------------------------------------";;
+
+    5)echo "------------------------------------------------------"
+        echo "Modify Record"
+        echo "Please enter the name of the record to be modified"
+        read mod
+        grep -i "^$mod" $fname
+        grep -v "^$mod" $fname>>nfile.txt
+        cp nfile.txt $fname
+        rm nfile.txt
+        echo "Enter new details of record"
+        echo "Enter name:"
+        read name
+        echo "Enter class:"
+        read class
+        echo "Enter roll number:"
+        read roll
+        echo "Enter address:"
+        read addr
+        echo "$name $class $roll $addr">>$fname
+        echo "Updated Database"
+        echo "------------------------------------------------------"
+        cat $fname
+        echo "------------------------------------------------------";;
+
+    6)echo "------------------------------------------------------"
+        echo "Search Record"
+        echo "Please enter the name of the record to be searched"
+        read sname
+        echo "------------------------------------------------------"
+        grep -i "^$sname" $fname
+        if [ $? -eq "0" ] 
+        then
+            echo "Record is present" 
+        else
+            echo "Record is not present"
+        fi
+        ;;
+
+    7)exit 0;;
+
+    esac
+done
